@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/components/custom_button.dart';
 import 'package:social_media_app/components/custom_text_field1.dart';
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  void Function() onTap;
+  LoginPage({super.key, required this.onTap});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   TextEditingController _emailController = TextEditingController();
+
   TextEditingController _passController = TextEditingController();
 
-  LoginPage({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -34,16 +43,19 @@ class LoginPage extends StatelessWidget {
                 children: [
                   Text("Don't have an account?"),
                   SizedBox(width: 10,),
-                  Text(
-                    "Register",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: Colors.blue[700],
-                        decoration: TextDecoration.underline,
-                        decorationColor: Colors.blue[800]
-                    ),
+                  GestureDetector(
+                    onTap: widget.onTap,
+                    child: Text(
+                      "Register",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Colors.blue[700],
+                          decoration: TextDecoration.underline,
+                          decorationColor: Colors.blue[800]
+                      ),
 
+                    ),
                   ),
                 ],
               ),
