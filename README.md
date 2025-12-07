@@ -1,10 +1,10 @@
 # social_media_app
 
-A new Flutter project.
+A new Flutter project. Making a social media app. One can make posts and read others post in real time and can attach image in the posts not only that , one can chat with others.
 
-## Getting Started
+## Learning Basic CRUD Operations with firebase database
 
-This project is a starting point for a Flutter application.
+This project is a starting point for learning firebase database with flutter.
 
 A few resources to get you started if this is your first Flutter project:
 
