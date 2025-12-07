@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:social_media_app/auth/auth_services.dart';
 import 'package:social_media_app/components/custom_button.dart';
 import 'package:social_media_app/components/custom_text_field1.dart';
 class LoginPage extends StatefulWidget {
@@ -13,9 +15,21 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _emailController = TextEditingController();
 
   TextEditingController _passController = TextEditingController();
+  Future<void> login(BuildContext context)async{
+    try{
+      AuthServices _authServices = AuthServices();
+      await _authServices.signInWithEmailAndPass(_emailController.text, _passController.text);
+    } on FirebaseAuthException catch(e){
+      showDialog(
+          context: context,
+          builder: (context)=>AlertDialog(title: Text(e.toString()),)
+
+      );
+    }
 
 
 
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 20,),
               CustomTextField1(hintText: "Password...",isObscure: true,txtController: _passController,prefixIcon: Icons.lock,),
               SizedBox(height: 20,),
-              CustomButton(buttonTxt: "Login",),
+              CustomButton(buttonTxt: "Login",onTap: ()=>login(context),),
               SizedBox(height: 20,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

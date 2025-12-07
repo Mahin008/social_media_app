@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:social_media_app/auth/auth_services.dart';
 import 'package:social_media_app/components/custom_button.dart';
 import 'package:social_media_app/components/custom_text_field1.dart';
 class RegistrationPage extends StatefulWidget {
@@ -15,7 +17,30 @@ class _RegistrationPageState extends State<RegistrationPage> {
   TextEditingController _passController = TextEditingController();
 
   TextEditingController _confirmPassController = TextEditingController();
+  Future<void> register(BuildContext context)async{
+    try{
+      AuthServices _authServices= AuthServices();
+      if(_passController.text.trim()== _confirmPassController.text.trim()){
+        await _authServices.signUpWithEmailAndPass(_emailController.text, _passController.text);
+      }
+      else{
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text("Password didn't match!!"),
+              backgroundColor: Colors.red,
 
+          )
+        );
+      }
+
+    } on FirebaseAuthException catch(e){
+      showDialog(
+          context: context,
+          builder: (context)=>AlertDialog(title: Text(e.toString()),)
+      );
+    }
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +63,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               SizedBox(height: 20,),
               CustomTextField1(hintText: "Confirm Password...",isObscure: true,txtController: _confirmPassController,prefixIcon: Icons.lock,),
               SizedBox(height: 20,),
-              CustomButton(buttonTxt: "Register",),
+              CustomButton(buttonTxt: "Register",onTap: ()=> register(context),),
               SizedBox(height: 20,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
