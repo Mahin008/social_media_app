@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 class CustomTextField1 extends StatelessWidget {
   final String hintText;
   final bool isObscure;
-  IconData? prefixIcon;
-  int? linesNum;
+  final IconData? prefixIcon;
+  final int? linesNum;
   TextEditingController txtController= TextEditingController();
   CustomTextField1({super.key,required this.hintText, required this.isObscure, required this.txtController, this.prefixIcon,this.linesNum});
 
