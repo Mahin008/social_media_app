@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 class CustomTextField1 extends StatelessWidget {
   final String hintText;
   final bool isObscure;
-  IconData prefixIcon;
+  IconData? prefixIcon;
+  int? linesNum;
   TextEditingController txtController= TextEditingController();
-  CustomTextField1({super.key,required this.hintText, required this.isObscure, required this.txtController, required this.prefixIcon});
+  CustomTextField1({super.key,required this.hintText, required this.isObscure, required this.txtController, this.prefixIcon,this.linesNum});
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +13,7 @@ class CustomTextField1 extends StatelessWidget {
       padding: const EdgeInsets.only(left: 20,right: 20),
 
       child: TextField(
+          maxLines: linesNum,
           controller: txtController,
           obscureText: isObscure,
           decoration: InputDecoration(

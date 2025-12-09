@@ -7,16 +7,16 @@ class ChatPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Chats"),
+        title: Text("Chats",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
         leading: Icon(Icons.message,color: Colors.white,),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.blue[700],
         actions: [
           IconButton(
               onPressed: ()async{
                 AuthServices _auth= AuthServices();
                 await _auth.signOut();
               },
-              icon: Icon(Icons.logout_outlined)
+              icon: Icon(Icons.logout_outlined,color: Colors.white,)
           )
         ],
       ),

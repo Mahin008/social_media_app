@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:social_media_app/pages/home_page.dart';
 import 'package:social_media_app/pages/login_or_register.dart';
 
-import '../pages/feed.dart';
+//import '../pages/feed.dart';
 class AuthGate extends StatefulWidget {
   const AuthGate({super.key});
 
