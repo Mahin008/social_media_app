@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:social_media_app/pages/home_page.dart';
 import 'package:social_media_app/pages/login_or_register.dart';
 
 import '../pages/feed.dart';
@@ -18,7 +19,7 @@ class _AuthGateState extends State<AuthGate> {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context,snapshot){
             if(snapshot.hasData){
-              return Feed();
+              return HomePage();
             } else {
               return LoginOrRegister();
             }
