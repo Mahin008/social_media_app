@@ -13,18 +13,22 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   TextEditingController _emailController = TextEditingController();
-
   TextEditingController _passController = TextEditingController();
+  bool isLoading=false;
   Future<void> login(BuildContext context)async{
     try{
+      setState(() {
+        isLoading=true;
+      });
       AuthServices _authServices = AuthServices();
       await _authServices.signInWithEmailAndPass(_emailController.text, _passController.text);
+
     } on FirebaseAuthException catch(e){
       showDialog(
           context: context,
           builder: (context)=>AlertDialog(title: Text(e.toString()),)
-
       );
+      isLoading=false;
     }
 
 
@@ -46,11 +50,11 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 20,),
               Text("Hello! Welcome to Social Media App",style: TextStyle(fontSize: 18),),
               SizedBox(height: 20,),
-              CustomTextField1(hintText: "Email...",isObscure: false,txtController: _emailController,prefixIcon: Icons.email,),
+              CustomTextField1(hintText: "Email...",isObscure: false,txtController: _emailController,prefixIcon: Icons.email,linesNum: 1,),
               SizedBox(height: 20,),
-              CustomTextField1(hintText: "Password...",isObscure: true,txtController: _passController,prefixIcon: Icons.lock,),
+              CustomTextField1(hintText: "Password...",isObscure: true,txtController: _passController,prefixIcon: Icons.lock,linesNum: 1,),
               SizedBox(height: 20,),
-              CustomButton(buttonTxt: "Login",onTap: ()=>login(context),),
+              CustomButton(buttonTxt: "Login",onTap: ()=>login(context),color: Colors.red[800],isLoading: isLoading,),
               SizedBox(height: 20,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

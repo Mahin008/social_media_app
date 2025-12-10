@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/components/custom_button.dart';
 import 'package:social_media_app/components/custom_text_field1.dart';
-class AddPosts extends StatelessWidget {
-  final postController = TextEditingController();
+import 'package:firebase_database/firebase_database.dart';
+import 'package:toast/toast.dart';
+class AddPosts extends StatefulWidget {
+
   AddPosts({super.key});
+
+  @override
+  State<AddPosts> createState() => _AddPostsState();
+}
+
+class _AddPostsState extends State<AddPosts> {
+  final postController = TextEditingController();
+  bool isLoading = false;
+  DatabaseReference ref = FirebaseDatabase.instance.ref("Posts");
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +32,23 @@ class AddPosts extends StatelessWidget {
               linesNum: 4,
           ),
           SizedBox(height: 10,),
-          CustomButton(buttonTxt: "Add Post", onTap: (){},color: Colors.purple[500],)
+          CustomButton(
+            buttonTxt: "Add Post",
+            onTap: (){
+              ref.child('1').set(
+                {
+                  'post_message': postController.text.toString()
+                }
+              ).then((value){
+                Toast.show("Post Added",backgroundColor: Colors.green,textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.bold));
+                isLoading=false;
+              }).onError((error,stackTrack){
+                Toast.show(error.toString());
+                isLoading=false;
+              });
+            },
+            color: Colors.purple,
+          )
         ],
       ),
     );

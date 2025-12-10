@@ -12,18 +12,21 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
-  TextEditingController _emailController = TextEditingController();
-
-  TextEditingController _passController = TextEditingController();
-
-  TextEditingController _confirmPassController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
+  final TextEditingController _confirmPassController = TextEditingController();
+  bool isLoading = false;
   Future<void> register(BuildContext context)async{
     try{
+      setState(() {
+        isLoading=true;
+      });
       AuthServices _authServices= AuthServices();
       if(_passController.text.trim()== _confirmPassController.text.trim()){
         await _authServices.signUpWithEmailAndPass(_emailController.text, _passController.text);
       }
       else{
+        isLoading=false;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: Text("Password didn't match!!"),
@@ -38,6 +41,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           context: context,
           builder: (context)=>AlertDialog(title: Text(e.toString()),)
       );
+      isLoading=false;
     }
 
   }
@@ -57,13 +61,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
               SizedBox(height: 20,),
               Text("Let's Create an Account!",style: TextStyle(fontSize: 18),),
               SizedBox(height: 20,),
-              CustomTextField1(hintText: "Email...",isObscure: false,txtController: _emailController,prefixIcon: Icons.email,),
+              CustomTextField1(hintText: "Email...",isObscure: false,txtController: _emailController,prefixIcon: Icons.email,linesNum: 1,),
               SizedBox(height: 20,),
-              CustomTextField1(hintText: "Password...",isObscure: true,txtController: _passController,prefixIcon: Icons.lock,),
+              CustomTextField1(hintText: "Password...",isObscure: true,txtController: _passController,prefixIcon: Icons.lock,linesNum: 1,),
               SizedBox(height: 20,),
-              CustomTextField1(hintText: "Confirm Password...",isObscure: true,txtController: _confirmPassController,prefixIcon: Icons.lock,),
+              CustomTextField1(hintText: "Confirm Password...",isObscure: true,txtController: _confirmPassController,prefixIcon: Icons.lock,linesNum: 1,),
               SizedBox(height: 20,),
-              CustomButton(buttonTxt: "Register",onTap: ()=> register(context),),
+              CustomButton(buttonTxt: "Register",onTap: ()=> register(context),color: Colors.red[800],isLoading: isLoading,),
               SizedBox(height: 20,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
