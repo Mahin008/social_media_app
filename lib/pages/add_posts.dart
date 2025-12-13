@@ -15,9 +15,27 @@ class _AddPostsState extends State<AddPosts> {
   final postController = TextEditingController();
   bool isLoading = false;
   DatabaseReference ref = FirebaseDatabase.instance.ref("Posts");
-
+  Future<void> addPost(BuildContext context)async{
+    setState(() {
+      isLoading=true;
+    });
+    try{
+      await ref.child(DateTime.now().millisecondsSinceEpoch.toString()).set({
+        'post_message': postController.text.toString()
+      });
+      postController.clear();
+      Toast.show("Post Added");
+    } catch(e){
+      Toast.show(e.toString());
+    } finally{
+      setState(() {
+        isLoading=false;
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
+    ToastContext().init(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Add Posts",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
@@ -34,20 +52,9 @@ class _AddPostsState extends State<AddPosts> {
           SizedBox(height: 10,),
           CustomButton(
             buttonTxt: "Add Post",
-            onTap: (){
-              ref.child('1').set(
-                {
-                  'post_message': postController.text.toString()
-                }
-              ).then((value){
-                Toast.show("Post Added",backgroundColor: Colors.green,textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.bold));
-                isLoading=false;
-              }).onError((error,stackTrack){
-                Toast.show(error.toString());
-                isLoading=false;
-              });
-            },
+            onTap: ()=>addPost(context),
             color: Colors.purple,
+            isLoading: isLoading,
           )
         ],
       ),

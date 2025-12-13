@@ -17,16 +17,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final TextEditingController _confirmPassController = TextEditingController();
   bool isLoading = false;
   Future<void> register(BuildContext context)async{
+    setState(() {
+      isLoading=true;
+    });
     try{
-      setState(() {
-        isLoading=true;
-      });
+
       AuthServices _authServices= AuthServices();
       if(_passController.text.trim()== _confirmPassController.text.trim()){
         await _authServices.signUpWithEmailAndPass(_emailController.text, _passController.text);
       }
       else{
-        isLoading=false;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: Text("Password didn't match!!"),
@@ -41,7 +41,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
           context: context,
           builder: (context)=>AlertDialog(title: Text(e.toString()),)
       );
-      isLoading=false;
+    } finally {
+      setState(() {
+        isLoading=false;
+      });
     }
 
   }

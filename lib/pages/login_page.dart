@@ -16,10 +16,10 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _passController = TextEditingController();
   bool isLoading=false;
   Future<void> login(BuildContext context)async{
+    setState(() {
+      isLoading=true;
+    });
     try{
-      setState(() {
-        isLoading=true;
-      });
       AuthServices _authServices = AuthServices();
       await _authServices.signInWithEmailAndPass(_emailController.text, _passController.text);
 
@@ -28,7 +28,10 @@ class _LoginPageState extends State<LoginPage> {
           context: context,
           builder: (context)=>AlertDialog(title: Text(e.toString()),)
       );
-      isLoading=false;
+    } finally{
+      setState(() {
+        isLoading=false;
+      });
     }
 
 
