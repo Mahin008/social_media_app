@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_app/components/custom_button.dart';
 import 'package:social_media_app/components/custom_text_field1.dart';
@@ -15,13 +16,20 @@ class _AddPostsState extends State<AddPosts> {
   final postController = TextEditingController();
   bool isLoading = false;
   DatabaseReference ref = FirebaseDatabase.instance.ref("Posts");
+  final uid= FirebaseAuth.instance.currentUser?.uid;
+  final user_email= FirebaseAuth.instance.currentUser?.email;
   Future<void> addPost(BuildContext context)async{
     setState(() {
       isLoading=true;
     });
+    String id = DateTime.now().millisecondsSinceEpoch.toString();
     try{
-      await ref.child(DateTime.now().millisecondsSinceEpoch.toString()).set({
-        'post_message': postController.text.toString()
+      await ref.child(id).set({
+        'user_id': uid,
+        'post_id': id,
+        'user_email': user_email,
+        'post_message': postController.text.toString(),
+        'post_date': DateTime.now().toIso8601String(),
       });
       postController.clear();
       Toast.show("Post Added");

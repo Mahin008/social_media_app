@@ -14,6 +14,7 @@ class Feed extends StatefulWidget {
 class _FeedState extends State<Feed> {
   DatabaseReference ref= FirebaseDatabase.instance.ref('Posts');
   TextEditingController searchController = TextEditingController();
+  TextEditingController editController = TextEditingController();
   void search(String postMessage,searchText){
     setState(() {
 
@@ -68,14 +69,66 @@ class _FeedState extends State<Feed> {
           Expanded(
             child: FirebaseAnimatedList(query: ref, itemBuilder: (context,snapshot,animation,index){
               final postMessage = snapshot.child('post_message').value.toString();
+              final user_email_id = snapshot.child('user_email').value.toString();
+              final post_time = snapshot.child('post_date').value.toString();
+              final post_id = snapshot.child('post_id').value.toString();
 
               if(postMessage.toLowerCase().contains(searchController.text.toLowerCase())){
                 return ListTile(
-                    title: Text(snapshot.child('post_message').value.toString())
+
+                    title: Text(postMessage,style:TextStyle(fontSize: 20),),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(user_email_id),
+                        SizedBox(height: 10,),
+                        Text(post_time),
+                      ],
+                    ),
+                    trailing: PopupMenuButton(
+                        icon: Icon(Icons.more_vert_outlined),
+                        itemBuilder: (context)=>[
+                          PopupMenuItem(
+                              child: ListTile(
+                                title: Text('Edit'),
+                                leading: Icon(Icons.edit),
+                                onTap: (){
+                                  Navigator.pop(context);
+                                  showMyDialog(postMessage, post_id);
+                                },
+                              ),
+                          ),
+                        ],
+                    ),
+
                 );
               } else if(searchController.text.isEmpty){
-                return ListTile(
-                    title: Text(snapshot.child('post_message').value.toString())
+                return  ListTile(
+
+                  title: Text(postMessage,style:TextStyle(fontSize: 20)),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(user_email_id),
+                      SizedBox(height: 10,),
+                      Text(post_time),
+                    ],
+                  ),
+                  trailing: PopupMenuButton(
+                    icon: Icon(Icons.more_vert_outlined),
+                    itemBuilder: (context)=>[
+                      PopupMenuItem(
+                        child: ListTile(
+                          title: Text('Edit'),
+                          leading: Icon(Icons.edit),
+                          onTap: (){
+                            Navigator.pop(context);
+                            showMyDialog(postMessage, post_id);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 );
               } else{
                 return Container();
@@ -89,6 +142,41 @@ class _FeedState extends State<Feed> {
         ],
       ),
     );
+  }
+  Future<void> showMyDialog(String post_text,id)async{
+    editController.text= post_text;
+    return showDialog(
+
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            title: Text('Update'),
+            content: Container(
+              child: TextField(
+                  maxLines: 4,
+                  controller: editController,
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(borderSide:BorderSide(color: Colors.red)),
+                    focusedBorder: OutlineInputBorder(borderSide:BorderSide(color: Colors.green)),
+                  ),
+              ),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: (){
+                    Navigator.pop(context);
+                    ref.child(id).update({
+                      'post_message': editController.text,
+                    });
+                  },
+                  child: Text('Update')
+              ),
+              TextButton(onPressed: (){Navigator.pop(context);}, child: Text("Cancel")),
+            ],
+          );
+        },
+    );
+
   }
 }
 // Stream Builder Code to fecth data from realtime database
