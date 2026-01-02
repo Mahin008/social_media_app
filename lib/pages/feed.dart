@@ -2,7 +2,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_app/auth/auth_services.dart';
-import 'package:social_media_app/components/custom_text_field1.dart';
 import 'package:social_media_app/pages/add_posts.dart';
 class Feed extends StatefulWidget {
   Feed({super.key});
@@ -98,6 +97,17 @@ class _FeedState extends State<Feed> {
                                 },
                               ),
                           ),
+
+                          PopupMenuItem(
+                              child: ListTile(
+                                title: Text("Delete"),
+                                leading: Icon(Icons.delete),
+                                onTap: (){
+                                  Navigator.pop(context);
+                                  ref.child(post_id).remove();
+                                },
+                              )
+                          )
                         ],
                     ),
 
@@ -127,6 +137,18 @@ class _FeedState extends State<Feed> {
                           },
                         ),
                       ),
+                      PopupMenuItem(
+                          child: ListTile(
+                            title: Text("Delete"),
+                            leading: Icon(Icons.delete),
+                            onTap: (){
+                              Navigator.pop(context);
+                              ref.child(post_id).remove();
+                            },
+                          )
+                      )
+
+
                     ],
                   ),
                 );
